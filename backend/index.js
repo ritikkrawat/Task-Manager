@@ -22,7 +22,7 @@ app.use(cors({
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Task Manager API is running");
+  res.send("Backend Working");
 });
 
 const PORT = process.env.PORT || 5000;
