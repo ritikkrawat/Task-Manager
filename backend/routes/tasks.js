@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
-const tasks = require("../data/store");
+const { readTasks, writeTasks } = require("../data/store");
 
-// GET all tasks - sorted by creation date (newest first)
+// GET all tasks
 router.get("/", (req, res) => {
+  const tasks = readTasks();
   const sorted = [...tasks].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -19,6 +20,8 @@ router.post("/", (req, res) => {
     return res.status(400).json({ error: "Title is required" });
   }
 
+  const tasks = readTasks();
+
   const task = {
     id: uuidv4(),
     title: title.trim(),
@@ -29,11 +32,13 @@ router.post("/", (req, res) => {
   };
 
   tasks.push(task);
+  writeTasks(tasks);
   res.status(201).json(task);
 });
 
 // PUT update a task
 router.put("/:id", (req, res) => {
+  const tasks = readTasks();
   const task = tasks.find((t) => t.id === req.params.id);
 
   if (!task) {
@@ -50,11 +55,13 @@ router.put("/:id", (req, res) => {
   task.description = description || "";
   task.dueDate = dueDate || null;
 
+  writeTasks(tasks);
   res.json(task);
 });
 
-// PATCH toggle complete/incomplete
+// PATCH toggle
 router.patch("/:id/toggle", (req, res) => {
+  const tasks = readTasks();
   const task = tasks.find((t) => t.id === req.params.id);
 
   if (!task) {
@@ -62,11 +69,13 @@ router.patch("/:id/toggle", (req, res) => {
   }
 
   task.completed = !task.completed;
+  writeTasks(tasks);
   res.json(task);
 });
 
 // DELETE a task
 router.delete("/:id", (req, res) => {
+  let tasks = readTasks();
   const index = tasks.findIndex((t) => t.id === req.params.id);
 
   if (index === -1) {
@@ -74,6 +83,7 @@ router.delete("/:id", (req, res) => {
   }
 
   tasks.splice(index, 1);
+  writeTasks(tasks);
   res.json({ message: "Task deleted" });
 });
 
