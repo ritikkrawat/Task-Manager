@@ -157,7 +157,6 @@ Task-Manager/
 │   │   ├── index.js
 │   │   └── index.css
 │   ├── .env
-│   ├── .env.production
 │   └── package.json
 │
 ├── server/
