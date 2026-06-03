@@ -1,6 +1,6 @@
 # Task Manager
 
-A full-stack task management application built with React and Node.js + Express. Users can create, view, edit, delete, and filter personal tasks with support for drag-and-drop reordering, search, and persistent storage. Built as part of the Studio Graphene Full Stack Developer Assessment (Exercise 1: Personal Task Manager).
+A full-stack task management application built with React and Node.js + Express. Users can create, view, edit, delete, and filter personal tasks with support for search and persistent storage. Built as part of the Studio Graphene Full Stack Developer Assessment (Exercise 1: Personal Task Manager).
 
 ---
 
@@ -16,7 +16,6 @@ A full-stack task management application built with React and Node.js + Express.
 ### Frontend
 - **React (Create React App)** — Component-based UI with hooks
 - **Axios** — Clean promise-based HTTP requests
-- **@hello-pangea/dnd** — Maintained fork of react-beautiful-dnd for drag and drop
 - **Plain CSS** — Simple, no overhead, easy to read
 
 ### Backend
@@ -63,7 +62,7 @@ Base URL (local): `http://localhost:5000`
 Base URL (production): `https://sgtaskmanagerbackend.onrender.com`
 
 ### GET /api/tasks
-Fetch all tasks.
+Fetch all tasks sorted by creation date newest first.
 
 **Response:**
 ```json
@@ -130,20 +129,6 @@ Toggle a task's completed status.
 
 ---
 
-### PATCH /api/tasks/reorder
-Save new task order after drag and drop.
-
-**Request Body:**
-```json
-{
-  "orderedIds": ["uuid1", "uuid2", "uuid3"]
-}
-```
-
-**Response:** `200 OK` — reordered tasks array.
-
----
-
 ### DELETE /api/tasks/:id
 Delete a task.
 
@@ -164,7 +149,7 @@ Task-Manager/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── TaskForm.jsx        # Add new task form
-│   │   │   ├── TaskList.jsx        # Drag and drop task list
+│   │   │   ├── TaskList.jsx        # Task list container
 │   │   │   ├── TaskItem.jsx        # Individual task with edit and delete
 │   │   │   └── FilterBar.jsx       # Filter and search bar
 │   │   ├── App.jsx                 # Root component, state and API calls
@@ -202,13 +187,13 @@ Task-Manager/
 - Visually distinguish overdue tasks with a red left border
 - Show active and completed task counts
 - Empty state UI when no tasks match
-- Drag and drop to reorder tasks
 - Tasks persist across server restarts via JSON file
 
 ---
 
 ## Next Steps
 
+- **Drag and drop** — reorder tasks with drag and drop using @hello-pangea/dnd
 - **Authentication** — JWT-based auth so multiple users can have their own task lists
 - **PostgreSQL or MongoDB** — replace JSON file storage with a proper database for scalability
 - **Due date notifications** — email or browser push notifications for upcoming due dates
