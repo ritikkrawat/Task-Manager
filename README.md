@@ -142,36 +142,38 @@ Delete a task.
 ---
 
 ## Project Structure
+```
 Task-Manager/
-├── client/                         # React frontend (Create React App)
+├── client/
 │   ├── public/
 │   │   └── index.html
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TaskForm.jsx        # Add new task form
-│   │   │   ├── TaskList.jsx        # Task list container
-│   │   │   ├── TaskItem.jsx        # Individual task with edit and delete
-│   │   │   └── FilterBar.jsx       # Filter and search bar
-│   │   ├── App.jsx                 # Root component, state and API calls
-│   │   ├── index.js                # React entry point
-│   │   └── index.css               # Global styles
-│   ├── .env                        # Local environment variables
-│   ├── .env.production             # Production environment variables
+│   │   │   ├── TaskForm.jsx
+│   │   │   ├── TaskList.jsx
+│   │   │   ├── TaskItem.jsx
+│   │   │   └── FilterBar.jsx
+│   │   ├── App.jsx
+│   │   ├── index.js
+│   │   └── index.css
+│   ├── .env
+│   ├── .env.production
 │   └── package.json
 │
-├── server/                         # Node.js + Express backend
+├── server/
 │   ├── api/
-│   │   └── index.js                # Vercel serverless entry point
+│   │   └── index.js
 │   ├── data/
-│   │   └── store.js                # JSON file read/write helpers
+│   │   └── store.js
 │   ├── routes/
-│   │   └── tasks.js                # All task REST endpoints
-│   ├── app.js                      # Express app setup and CORS
-│   ├── index.js                    # Local server entry point
-│   ├── vercel.json                 # Vercel deployment config
+│   │   └── tasks.js
+│   ├── app.js
+│   ├── index.js
+│   ├── vercel.json
 │   └── package.json
 │
 └── README.md
+```
 
 ---
 
