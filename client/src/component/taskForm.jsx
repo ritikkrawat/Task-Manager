@@ -20,7 +20,6 @@ export default function TaskForm({ onAdd }) {
     }
 
     onAdd({ title, description, dueDate });
-
     setTitle("");
     setDescription("");
     setDueDate("");
@@ -28,31 +27,40 @@ export default function TaskForm({ onAdd }) {
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <h2>Add Task</h2>
+    <form onSubmit={handleSubmit}>
+      <p className="form-title">Add a new task</p>
 
       {error && <p className="error">{error}</p>}
 
-      <input
-        type="text"
-        placeholder="Task title *"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      <div className="field">
+        <label>Title *</label>
+        <input
+          type="text"
+          placeholder="e.g. Complete project report"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
 
-      <textarea
-        placeholder="Description (optional)"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      <div className="field">
+        <label>Description</label>
+        <textarea
+          placeholder="Add more details (optional)"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
 
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-      />
+      <div className="field">
+        <label>Due date *</label>
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+      </div>
 
-      <button type="submit">Add Task</button>
+      <button type="submit" className="btn-primary">Add Task</button>
     </form>
   );
 }

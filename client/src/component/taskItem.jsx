@@ -39,8 +39,8 @@ export default function TaskItem({ task, onUpdate, onToggle, onDelete }) {
           onChange={(e) => setDueDate(e.target.value)}
         />
         <div className="task-actions">
-          <button onClick={handleUpdate}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <button className="btn-edit" onClick={handleUpdate}>Save</button>
+          <button className="btn-delete" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
       </div>
     );
@@ -60,16 +60,27 @@ export default function TaskItem({ task, onUpdate, onToggle, onDelete }) {
       {task.description && <p>{task.description}</p>}
 
       {task.dueDate && (
-        <p className="due-date">
-          Due: {new Date(task.dueDate).toLocaleDateString("en-GB")}
-          {isOverdue && <span className="overdue-label"> — Overdue</span>}
-        </p>
+        <div className="task-footer">
+          <div className="due-date">
+            <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+            {isOverdue && <span className="overdue-badge">Overdue</span>}
+          </div>
+          <div className="task-actions">
+            <button className="btn-edit" onClick={() => setIsEditing(true)}>Edit</button>
+            <button className="btn-delete" onClick={handleDelete}>Delete</button>
+          </div>
+        </div>
       )}
 
-      <div className="task-actions">
-        <button onClick={() => setIsEditing(true)}>Edit</button>
-        <button onClick={handleDelete}>Delete</button>
-      </div>
+      {!task.dueDate && (
+        <div className="task-footer">
+          <span />
+          <div className="task-actions">
+            <button className="btn-edit" onClick={() => setIsEditing(true)}>Edit</button>
+            <button className="btn-delete" onClick={handleDelete}>Delete</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

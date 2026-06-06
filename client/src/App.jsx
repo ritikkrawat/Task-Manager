@@ -3,6 +3,7 @@ import TaskForm from "./component/taskForm";
 import TaskList from "./component/taskList";
 import FilterBar from "./component/filterBar";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
@@ -10,7 +11,6 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function App() {
       const res = await axios.get(`${API_URL}/api/tasks`);
       setTasks(res.data);
     } catch (err) {
-      setError("Failed to fetch tasks");
+      toast.error("Failed to fetch tasks");
     } finally {
       setLoading(false);
     }
@@ -33,8 +33,9 @@ export default function App() {
     try {
       const res = await axios.post(`${API_URL}/api/tasks`, taskData);
       setTasks([res.data, ...tasks]);
+      toast.success("Task added");
     } catch (err) {
-      setError("Failed to add task");
+      toast.error("Failed to add task");
     }
   };
 
@@ -42,8 +43,9 @@ export default function App() {
     try {
       const res = await axios.put(`${API_URL}/api/tasks/${id}`, updatedData);
       setTasks(tasks.map((t) => (t.id === id ? res.data : t)));
+      toast.success("Task updated");
     } catch (err) {
-      setError("Failed to update task");
+      toast.error("Failed to update task");
     }
   };
 
@@ -51,8 +53,9 @@ export default function App() {
     try {
       const res = await axios.patch(`${API_URL}/api/tasks/${id}/toggle`);
       setTasks(tasks.map((t) => (t.id === id ? res.data : t)));
+      toast.success(res.data.completed ? "Task completed" : "Task marked active");
     } catch (err) {
-      setError("Failed to toggle task");
+      toast.error("Failed to update task");
     }
   };
 
@@ -60,8 +63,9 @@ export default function App() {
     try {
       await axios.delete(`${API_URL}/api/tasks/${id}`);
       setTasks(tasks.filter((t) => t.id !== id));
+      toast.success("Task deleted");
     } catch (err) {
-      setError("Failed to delete task");
+      toast.error("Failed to delete task");
     }
   };
 
@@ -69,9 +73,9 @@ export default function App() {
     const matchesFilter =
       filter === "active" ? !t.completed :
       filter === "completed" ? t.completed : true;
-    
+
     const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase());
-    
+
     return matchesFilter && matchesSearch;
   });
 
@@ -80,36 +84,55 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1>Task Manager</h1>
-
-      {error && <p className="error">{error}</p>}
-
-      <TaskForm onAdd={addTask} />
-
-      <div className="task-stats">
-        <span>Active: {activeCount}</span>
-        <span>Completed: {completedCount}</span>
+      <div className="header">
+        <h1>Task Manager</h1>
+        <p>Manage your tasks, stay on top of deadlines.</p>
       </div>
 
-      <FilterBar
-        filter={filter}
-        onFilterChange={setFilter}
-        search={search}
-        onSearchChange={setSearch}
-      />
+      <div className="layout">
+        <div className="left-panel">
+          <div className="card">
+            <TaskForm onAdd={addTask} />
+          </div>
+        </div>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : filteredTasks.length === 0 ? (
-        <p className="empty">No tasks found.</p>
-      ) : (
-        <TaskList
-          tasks={filteredTasks}
-          onUpdate={updateTask}
-          onToggle={toggleTask}
-          onDelete={deleteTask}
-        />
-      )}
+        <div className="right-panel">
+          <div className="stats">
+            <div className="stat">
+              <div className="stat-label">Active tasks</div>
+              <div className="stat-value">{activeCount}</div>
+            </div>
+            <div className="stat">
+              <div className="stat-label">Completed</div>
+              <div className="stat-value">{completedCount}</div>
+            </div>
+          </div>
+
+          <div className="toolbar">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search tasks..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <FilterBar filter={filter} onFilterChange={setFilter} />
+          </div>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : filteredTasks.length === 0 ? (
+            <p className="empty">No tasks found.</p>
+          ) : (
+            <TaskList
+              tasks={filteredTasks}
+              onUpdate={updateTask}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
